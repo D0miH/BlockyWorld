@@ -36,11 +36,6 @@ public class Chunk : MonoBehaviour {
             }
         }
 
-        blocks[chunkSize - 1, chunkSize - 1, chunkSize - 1] = new AirBlock(new Vector3(chunkSize - 1, chunkSize - 1, chunkSize - 1));
-        blocks[chunkSize - 1, chunkSize - 1, 0] = new AirBlock(new Vector3(chunkSize - 1, chunkSize - 1, 0));
-        blocks[0, chunkSize - 1, 0] = new AirBlock(new Vector3(0, chunkSize - 1, 0));
-        blocks[0, chunkSize - 1, chunkSize - 1] = new AirBlock(new Vector3(0, chunkSize - 1, chunkSize - 1));
-
         UpdateChunkMesh();
         RenderChunkMesh();
     }
