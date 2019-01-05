@@ -12,6 +12,9 @@ public class ChunkMesh {
     public List<Vector3> colliderVertices = new List<Vector3>();
     public List<int> colliderTriangles = new List<int>();
 
+    // list of uv coordinates for texturing
+    public List<Vector2> uvList = new List<Vector2>();
+
     /// <summary>
     /// Adds a face to the mesh of the chunk which is defined by the four given points. 
     /// First point should be upper left point of the quad. Then cycle through the points clockwise.
@@ -42,6 +45,14 @@ public class ChunkMesh {
     void AddVertex(Vector3 vertex) {
         verticesList.Add(vertex);
         colliderVertices.Add(vertex);
+    }
+
+    /// <summary>
+    /// Takes an array of uv coordinates and adds them to the uv list.
+    /// </summary>
+    /// <param name="uvCoords">The given array of uv coordinates</param>
+    public void AddUVCoordinates(Vector2[] uvCoords) {
+        uvList.AddRange(uvCoords);
     }
 
     /// <summary>

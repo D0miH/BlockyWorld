@@ -2,10 +2,17 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Block {
+public abstract class Block {
 
     // define the face sides of the block
     public enum FaceDirection { up, down, east, west, north, south };
+    // define the position of the texture in the texture atlas
+    public struct TextureAtlasCoords {
+        public int x;
+        public int y;
+    }
+    // tile size is calculated by dividing 1 through the number of tiles per side
+    const float tileSize = 0.25f;
 
     // the position of the block in chunk coordinates
     public Vector3 blockPos;
@@ -17,6 +24,34 @@ public class Block {
     public Block(Vector3 pos) {
         blockPos = pos;
     }
+
+    /// <summary>
+    /// Returns the uv coordinates of the face.
+    /// </summary>
+    /// <param name="faceDir">The direction of the face</param>
+    /// <returns>The uv coordinates</returns>
+    public Vector2[] GetFaceUVCoordinates(FaceDirection faceDir) {
+        Vector2[] uvCoords = new Vector2[4];
+
+        // get the position of the texture
+        TextureAtlasCoords texturePos = GetTextureTileCoords(faceDir);
+
+        // TODO: POINTS FROM ONE FACE HAVE TO BE DRAWN AFTER EACH OTHER
+
+        uvCoords[0] = new Vector2(tileSize * texturePos.x, tileSize * texturePos.y + tileSize);             // texture for upper left vertex
+        uvCoords[1] = new Vector2(tileSize * texturePos.x + tileSize, tileSize * texturePos.y + tileSize);  // texture for upper right vertex
+        uvCoords[2] = new Vector2(tileSize * texturePos.x + tileSize, tileSize * texturePos.y);             // texture for lower right vertex
+        uvCoords[3] = new Vector2(tileSize * texturePos.x, tileSize * texturePos.y);                        // texture for lower left vertex
+
+        return uvCoords;
+    }
+
+    /// <summary>
+    /// Returns the texture atlas coordinates for the given face.
+    /// </summary>
+    /// <param name="faceDir">The direction of the face</param>
+    /// <returns>The texture atlas coordinates of the face</returns>
+    public abstract TextureAtlasCoords GetTextureTileCoords(FaceDirection faceDir);
 
     /// <summary>
     /// Adds the mesh data of the block to the given chunk mesh.
@@ -82,6 +117,10 @@ public class Block {
                 break;
         }
 
+        // add the mesh data to the chunk mesh
         chunkMesh.AddFace(point1, point2, point3, point4);
+        // add the uv coordinates of the face
+        Vector2[] uvCoords = GetFaceUVCoordinates(direction);
+        chunkMesh.AddUVCoordinates(uvCoords);
     }
 }

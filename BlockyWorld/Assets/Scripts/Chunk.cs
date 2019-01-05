@@ -8,7 +8,7 @@ using UnityEngine;
 public class Chunk : MonoBehaviour {
 
     // define the dimensions of the chunk
-    public const int chunkSize = 1;
+    public const int chunkSize = 3;
 
     // the variables for the mesh components
     MeshFilter meshFilter;
@@ -28,8 +28,13 @@ public class Chunk : MonoBehaviour {
 
         chunkMesh = new ChunkMesh();
 
-
-        blocks[0, 0, 0] = new Block(new Vector3(0, 0, 0));
+        for (int x = 0; x < chunkSize; x++) {
+            for (int z = 0; z < chunkSize; z++) {
+                for (int y = 0; y < chunkSize; y++) {
+                    blocks[x, y, z] = new GrassBlock(new Vector3(x, y, z));
+                }
+            }
+        }
 
         UpdateChunkMesh();
         RenderChunkMesh();
@@ -55,6 +60,7 @@ public class Chunk : MonoBehaviour {
         meshFilter.mesh.Clear();
         meshFilter.mesh.vertices = chunkMesh.verticesList.ToArray();
         meshFilter.mesh.triangles = chunkMesh.trianglesList.ToArray();
+        meshFilter.mesh.uv = chunkMesh.uvList.ToArray();
 
         // add the collider mesh to the mesh collider
         meshCollider.sharedMesh = null;
