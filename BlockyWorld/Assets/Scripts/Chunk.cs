@@ -36,6 +36,11 @@ public class Chunk : MonoBehaviour {
             }
         }
 
+        blocks[chunkSize - 1, chunkSize - 1, chunkSize - 1] = new AirBlock(new Vector3(chunkSize - 1, chunkSize - 1, chunkSize - 1));
+        blocks[chunkSize - 1, chunkSize - 1, 0] = new AirBlock(new Vector3(chunkSize - 1, chunkSize - 1, 0));
+        blocks[0, chunkSize - 1, 0] = new AirBlock(new Vector3(0, chunkSize - 1, 0));
+        blocks[0, chunkSize - 1, chunkSize - 1] = new AirBlock(new Vector3(0, chunkSize - 1, chunkSize - 1));
+
         UpdateChunkMesh();
         RenderChunkMesh();
     }
@@ -44,12 +49,27 @@ public class Chunk : MonoBehaviour {
     void Update() {
     }
 
+    /// <summary>
+    /// Returns the block at the given position. The position should be given in chunk coordinates.
+    /// </summary>
+    /// <param name="blockPos">The given block position in the chunk</param>
+    public Block GetBlock(Vector3 blockPos) {
+        // if the block is not in the range of the chunk, return an air block in order to render the outer blocks of the chunk
+        if (blockPos.x < 0 || blockPos.x >= chunkSize
+        || blockPos.y < 0 || blockPos.y >= chunkSize
+        || blockPos.z < 0 || blockPos.z >= chunkSize) {
+            return new AirBlock(blockPos);
+        }
+
+        return blocks[(int)blockPos.x, (int)blockPos.y, (int)blockPos.z];
+    }
+
     void UpdateChunkMesh() {
         // iterate through the chunk and get the block data from every block
         for (int x = 0; x < chunkSize; x++) {
             for (int z = 0; z < chunkSize; z++) {
                 for (int y = 0; y < chunkSize; y++) {
-                    blocks[x, y, z].AddBlockToChunk(ref chunkMesh);
+                    blocks[x, y, z].AddBlockToChunk(this, ref chunkMesh);
                 }
             }
         }

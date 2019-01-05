@@ -30,4 +30,9 @@ public class GrassBlock : Block {
                 return texCoords;
         }
     }
+
+    public override bool IsFaceSolid(FaceDirection faceDir) {
+        // because all sides of the grass block are solid always return true
+        return true;
+    }
 }

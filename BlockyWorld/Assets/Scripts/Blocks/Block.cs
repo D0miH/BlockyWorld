@@ -36,8 +36,6 @@ public abstract class Block {
         // get the position of the texture
         TextureAtlasCoords texturePos = GetTextureTileCoords(faceDir);
 
-        // TODO: POINTS FROM ONE FACE HAVE TO BE DRAWN AFTER EACH OTHER
-
         uvCoords[0] = new Vector2(tileSize * texturePos.x, tileSize * texturePos.y + tileSize);             // texture for upper left vertex
         uvCoords[1] = new Vector2(tileSize * texturePos.x + tileSize, tileSize * texturePos.y + tileSize);  // texture for upper right vertex
         uvCoords[2] = new Vector2(tileSize * texturePos.x + tileSize, tileSize * texturePos.y);             // texture for lower right vertex
@@ -54,17 +52,47 @@ public abstract class Block {
     public abstract TextureAtlasCoords GetTextureTileCoords(FaceDirection faceDir);
 
     /// <summary>
+    /// Returns whether the face with the given direction of the block is solid or not.
+    /// </summary>
+    /// <param name="faceDir">The direction of the face to check</param>
+    /// <returns></returns>
+    public abstract bool IsFaceSolid(FaceDirection faceDir);
+
+    /// <summary>
     /// Adds the mesh data of the block to the given chunk mesh.
     /// </summary>
     /// <param name="chunkMesh">The given chunk mesh</param>
     /// <returns></returns>
-    public void AddBlockToChunk(ref ChunkMesh chunkMesh) {
-        AddBlockFace(FaceDirection.up, ref chunkMesh);
-        AddBlockFace(FaceDirection.down, ref chunkMesh);
-        AddBlockFace(FaceDirection.east, ref chunkMesh);
-        AddBlockFace(FaceDirection.west, ref chunkMesh);
-        AddBlockFace(FaceDirection.north, ref chunkMesh);
-        AddBlockFace(FaceDirection.south, ref chunkMesh);
+    public virtual void AddBlockToChunk(Chunk chunk, ref ChunkMesh chunkMesh) {
+        // check the block above and below
+        Block upperBlock = chunk.GetBlock(new Vector3(blockPos.x, blockPos.y + 1, blockPos.z));
+        Block lowerBlock = chunk.GetBlock(new Vector3(blockPos.x, blockPos.y - 1, blockPos.z));
+        if (!upperBlock.IsFaceSolid(FaceDirection.down)) {
+            AddBlockFace(FaceDirection.up, ref chunkMesh);
+        }
+        if (!lowerBlock.IsFaceSolid(FaceDirection.up)) {
+            AddBlockFace(FaceDirection.down, ref chunkMesh);
+        }
+
+        // check the east and west block
+        Block eastBlock = chunk.GetBlock(new Vector3(blockPos.x - 1, blockPos.y, blockPos.z));
+        Block westBlock = chunk.GetBlock(new Vector3(blockPos.x + 1, blockPos.y, blockPos.z));
+        if (!eastBlock.IsFaceSolid(FaceDirection.west)) {
+            AddBlockFace(FaceDirection.west, ref chunkMesh);
+        }
+        if (!westBlock.IsFaceSolid(FaceDirection.east)) {
+            AddBlockFace(FaceDirection.east, ref chunkMesh);
+        }
+
+        // check the north and south block
+        Block northBlock = chunk.GetBlock(new Vector3(blockPos.x, blockPos.y, blockPos.z + 1));
+        Block southBlock = chunk.GetBlock(new Vector3(blockPos.x, blockPos.y, blockPos.z - 1));
+        if (!northBlock.IsFaceSolid(FaceDirection.south)) {
+            AddBlockFace(FaceDirection.north, ref chunkMesh);
+        }
+        if (!southBlock.IsFaceSolid(FaceDirection.north)) {
+            AddBlockFace(FaceDirection.south, ref chunkMesh);
+        }
     }
 
     /// <summary>
