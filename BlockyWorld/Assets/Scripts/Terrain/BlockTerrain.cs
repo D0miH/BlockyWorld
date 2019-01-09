@@ -46,9 +46,9 @@ public class BlockTerrain : MonoBehaviour {
     /// <returns>The chunk which the given position is located in</returns>
     Chunk GetChunk(Vector3 pos) {
         // round to the next chunk position
-        float xPos = (pos.x / Chunk.chunkSize) * Chunk.chunkSize;
-        float yPos = (pos.y / Chunk.chunkSize) * Chunk.chunkSize;
-        float zPos = (pos.z / Chunk.chunkSize) * Chunk.chunkSize;
+        float xPos = Mathf.FloorToInt(pos.x / Chunk.chunkSize) * Chunk.chunkSize;
+        float yPos = Mathf.FloorToInt(pos.y / Chunk.chunkSize) * Chunk.chunkSize;
+        float zPos = Mathf.FloorToInt(pos.z / Chunk.chunkSize) * Chunk.chunkSize;
         Vector3 chunkPos = new Vector3(xPos, yPos, zPos);
 
         // try to get the value
@@ -77,7 +77,8 @@ public class BlockTerrain : MonoBehaviour {
         for (int x = 0; x < Chunk.chunkSize; x++) {
             for (int z = 0; z < Chunk.chunkSize; z++) {
                 for (int y = 0; y < Chunk.chunkSize; y++) {
-                    chunk.blocks[x, y, z] = new GrassBlock(new Vector3(x, y, z));
+                    Vector3 blockPos = new Vector3(x, y, z);
+                    SetBlock(blockPos + chunkPos, new GrassBlock(blockPos));
                 }
             }
         }

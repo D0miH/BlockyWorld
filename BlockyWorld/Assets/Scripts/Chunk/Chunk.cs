@@ -19,7 +19,7 @@ public class Chunk : MonoBehaviour {
     MeshCollider meshCollider;
 
     // the array to store the blocks of the chunk
-    public Block[,,] blocks = new Block[chunkSize, chunkSize, chunkSize];
+    Block[,,] blocks = new Block[chunkSize, chunkSize, chunkSize];
 
     // the mesh of this chunk
     ChunkMesh chunkMesh;
