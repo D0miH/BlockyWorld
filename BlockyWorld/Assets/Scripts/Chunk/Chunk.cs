@@ -13,6 +13,8 @@ public class Chunk : MonoBehaviour {
     public bool updateMesh = true;
     // the position of the chunk in world coordinates
     public Vector3 chunkPos;
+    // the reference to the block terrain
+    public BlockTerrain blockTerrain;
 
     // the variables for the mesh components
     MeshFilter meshFilter;
@@ -49,7 +51,7 @@ public class Chunk : MonoBehaviour {
     public Block GetBlock(Vector3 blockPos) {
         // if the block is not in the range of the chunk, return an air block in order to render the outer blocks of the chunk
         if (!InsideChunk(blockPos)) {
-            return new AirBlock(blockPos);
+            return blockTerrain.GetBlock(blockPos + chunkPos);
         }
 
         return blocks[(int)blockPos.x, (int)blockPos.y, (int)blockPos.z];

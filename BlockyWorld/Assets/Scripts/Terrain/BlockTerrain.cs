@@ -29,13 +29,32 @@ public class BlockTerrain : MonoBehaviour {
     /// </summary>
     /// <param name="blockPos">The given position in world coordinates</param>
     /// <param name="block">The given block</param>
-    void SetBlock(Vector3 blockPos, Block block) {
+    public void SetBlock(Vector3 blockPos, Block block) {
         Chunk chunk = GetChunk(blockPos);
 
         if (chunk != null) {
             // if the chunk was found, set the block using chunk coordinates
             chunk.SetBlock(blockPos - chunk.chunkPos, block);
         }
+    }
+
+    /// <summary>
+    /// Gets a block at a given position and returns it. 
+    /// If there was no block found at the given position, an air block is returned.
+    /// </summary>
+    /// <param name="blockPos">The position of the block in world coordinates</param>
+    /// <returns>The block at the given position</returns>
+    public Block GetBlock(Vector3 blockPos) {
+        // get the chunk in which the block is located
+        Chunk chunk = GetChunk(blockPos);
+
+        // if the chunk was not found, return an air block
+        if (chunk == null) {
+            return new AirBlock(blockPos);
+        }
+
+        // else get the block from the chunk
+        return chunk.GetBlock(blockPos - chunk.chunkPos);
     }
 
     /// <summary>
@@ -71,6 +90,8 @@ public class BlockTerrain : MonoBehaviour {
         Chunk chunk = newChunk.GetComponent<Chunk>();
         // set the position of the chunk
         chunk.chunkPos = chunkPos;
+        // set the reference to the block terrain
+        chunk.blockTerrain = this;
 
         chunks.Add(chunkPos, chunk);
 
