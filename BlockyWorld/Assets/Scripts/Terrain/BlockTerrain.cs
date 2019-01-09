@@ -32,5 +32,18 @@ public class BlockTerrain : MonoBehaviour {
         // instantiate the chunk and add it as a child to the block terrain
         GameObject newChunk = Instantiate(chunkPrefab, chunkPos, Quaternion.identity);
         newChunk.transform.parent = transform;
+
+        // get the chunk component
+        Chunk chunk = newChunk.GetComponent<Chunk>();
+
+        chunks.Add(chunkPos, chunk);
+
+        for (int x = 0; x < Chunk.chunkSize; x++) {
+            for (int z = 0; z < Chunk.chunkSize; z++) {
+                for (int y = 0; y < Chunk.chunkSize; y++) {
+                    chunk.blocks[x, y, z] = new GrassBlock(new Vector3(x, y, z));
+                }
+            }
+        }
     }
 }
