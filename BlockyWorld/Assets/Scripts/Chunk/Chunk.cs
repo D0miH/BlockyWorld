@@ -11,6 +11,8 @@ public class Chunk : MonoBehaviour {
     public const int chunkSize = 3;
     // indicates whether the mesh should be updated
     public bool updateMesh = true;
+    // the position of the chunk in world coordinates
+    public Vector3 chunkPos;
 
     // the variables for the mesh components
     MeshFilter meshFilter;
@@ -51,6 +53,20 @@ public class Chunk : MonoBehaviour {
         }
 
         return blocks[(int)blockPos.x, (int)blockPos.y, (int)blockPos.z];
+    }
+
+    /// <summary>
+    /// Sets the given block at the given position.
+    /// </summary>
+    /// <param name="blockPos">The position in chunk coordinates</param>
+    /// <param name="block">The given block</param>
+    public void SetBlock(Vector3 blockPos, Block block) {
+        if (!InsideChunk(blockPos)) {
+            // if the position is not in the block just return
+            return;
+        }
+
+        blocks[(int)blockPos.x, (int)blockPos.y, (int)blockPos.z] = block;
     }
 
     /// <summary>
