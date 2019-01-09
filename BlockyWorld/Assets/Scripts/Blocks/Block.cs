@@ -75,13 +75,13 @@ public abstract class Block {
         }
 
         // check the east and west block
-        Block eastBlock = chunk.GetBlock(new Vector3(blockPos.x - 1, blockPos.y, blockPos.z));
-        Block westBlock = chunk.GetBlock(new Vector3(blockPos.x + 1, blockPos.y, blockPos.z));
+        Block eastBlock = chunk.GetBlock(new Vector3(blockPos.x + 1, blockPos.y, blockPos.z));
+        Block westBlock = chunk.GetBlock(new Vector3(blockPos.x - 1, blockPos.y, blockPos.z));
         if (!eastBlock.IsFaceSolid(FaceDirection.west)) {
-            AddBlockFace(FaceDirection.west, ref chunkMesh);
+            AddBlockFace(FaceDirection.east, ref chunkMesh);
         }
         if (!westBlock.IsFaceSolid(FaceDirection.east)) {
-            AddBlockFace(FaceDirection.east, ref chunkMesh);
+            AddBlockFace(FaceDirection.west, ref chunkMesh);
         }
 
         // check the north and south block
