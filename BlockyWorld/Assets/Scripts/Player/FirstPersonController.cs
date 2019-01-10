@@ -78,6 +78,16 @@ public class FirstPersonController : MonoBehaviour {
         transform.Rotate(Vector3.up * xMovement);
         // apply the y-movement (rotation around the x-axis) to the camera)
         transform.GetChild(0).transform.Rotate(Vector3.right * -yMovement);
+
+        // handle any click event
+        if (Input.GetMouseButtonDown(0)) {
+            RaycastHit raycastHit;
+            Transform camera = transform.GetChild(0).transform;
+            if (Physics.Raycast(camera.position, camera.forward, out raycastHit, 100)) {
+                Vector3 blockPos = EditTerrain.GetBlockPos(raycastHit);
+                EditTerrain.SetBlock(raycastHit, new AirBlock(blockPos));
+            }
+        }
     }
 
     /// <summary>

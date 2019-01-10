@@ -81,6 +81,8 @@ public class Chunk : MonoBehaviour {
     }
 
     void UpdateChunkMesh() {
+        chunkMesh = new ChunkMesh();
+
         // iterate through the chunk and get the block data from every block
         for (int x = 0; x < chunkSize; x++) {
             for (int z = 0; z < chunkSize; z++) {

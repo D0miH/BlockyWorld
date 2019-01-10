@@ -35,6 +35,9 @@ public class BlockTerrain : MonoBehaviour {
         if (chunk != null) {
             // if the chunk was found, set the block using chunk coordinates
             chunk.SetBlock(blockPos - chunk.chunkPos, block);
+            chunk.updateMesh = true;
+
+            UpdateAdjacentChunks(blockPos, chunk.chunkPos);
         }
     }
 
@@ -75,6 +78,56 @@ public class BlockTerrain : MonoBehaviour {
         chunks.TryGetValue(chunkPos, out resultChunk);
 
         return resultChunk;
+    }
+
+    /// <summary>
+    /// Checks whether the adjacent chunks need to be updated when changing the block at the given position.
+    /// </summary>
+    /// <param name="blockPos">The given position of the altered block</param>
+    /// <param name="chunkPos">The position of the chunk in which the block is located</param>
+    void UpdateAdjacentChunks(Vector3 blockPos, Vector3 chunkPos) {
+        Vector3 chunkBlockPos = blockPos - chunkPos;
+
+        // east chunk and west chunk
+        if (chunkBlockPos.x == 0) {
+            Chunk chunk = GetChunk(new Vector3(blockPos.x - 1, blockPos.y, blockPos.z));
+            if (chunk != null) {
+                chunk.updateMesh = true;
+            }
+        }
+        if (chunkBlockPos.x == Chunk.chunkSize - 1) {
+            Chunk chunk = GetChunk(new Vector3(blockPos.x + 1, blockPos.y, blockPos.z));
+            if (chunk != null) {
+                chunk.updateMesh = true;
+            }
+        }
+        // lower and upper chunk
+        if (chunkBlockPos.y == 0) {
+            Chunk chunk = GetChunk(new Vector3(blockPos.x, blockPos.y - 1, blockPos.z));
+            if (chunk != null) {
+                chunk.updateMesh = true;
+            }
+        }
+        if (chunkBlockPos.y == Chunk.chunkSize - 1) {
+            Chunk chunk = GetChunk(new Vector3(blockPos.x, blockPos.y + 1, blockPos.z));
+            if (chunk != null) {
+                chunk.updateMesh = true;
+            }
+        }
+        // south and north chunk
+        if (chunkBlockPos.z == 0) {
+            Chunk chunk = GetChunk(new Vector3(blockPos.x, blockPos.y, blockPos.z - 1));
+            if (chunk != null) {
+                chunk.updateMesh = true;
+            }
+        }
+        if (chunkBlockPos.z == Chunk.chunkSize - 1) {
+            Chunk chunk = GetChunk(new Vector3(blockPos.x, blockPos.y, blockPos.z + 1));
+            if (chunk != null) {
+                chunk.updateMesh = true;
+            }
+        }
+
     }
 
     /// <summary>
