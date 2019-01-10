@@ -99,7 +99,12 @@ public class BlockTerrain : MonoBehaviour {
             for (int z = 0; z < Chunk.chunkSize; z++) {
                 for (int y = 0; y < Chunk.chunkSize; y++) {
                     Vector3 blockPos = new Vector3(x, y, z);
-                    SetBlock(blockPos + chunkPos, new GrassBlock(blockPos));
+
+                    if ((blockPos.y + chunkPos.y) < -1) {
+                        SetBlock(blockPos + chunkPos, new DirtBlock(blockPos));
+                    } else {
+                        SetBlock(blockPos + chunkPos, new GrassBlock(blockPos));
+                    }
                 }
             }
         }
