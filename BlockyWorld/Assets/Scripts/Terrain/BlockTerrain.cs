@@ -15,9 +15,9 @@ public class BlockTerrain : MonoBehaviour {
     Dictionary<Vector3, Chunk> chunks = new Dictionary<Vector3, Chunk>();
 
     void Start() {
-        for (int x = 0; x < terrainWidth; x++) {
-            for (int z = 0; z < terrainWidth; z++) {
-                for (int y = 0; y < terrainHeight; y++) {
+        for (int x = -terrainWidth; x < terrainWidth; x++) {
+            for (int z = -terrainWidth; z < terrainWidth; z++) {
+                for (int y = -terrainHeight; y < 0; y++) {
                     CreateChunk(new Vector3(x * Chunk.chunkSize, y * Chunk.chunkSize, z * Chunk.chunkSize));
                 }
             }
