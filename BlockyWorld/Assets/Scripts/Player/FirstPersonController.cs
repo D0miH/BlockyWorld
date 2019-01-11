@@ -31,7 +31,9 @@ public class FirstPersonController : MonoBehaviour {
         // handle the input
         HandleKeyInput();
         HandleMouseInput();
+    }
 
+    void FixedUpdate() {
         MovePlayer();
     }
 
@@ -54,10 +56,10 @@ public class FirstPersonController : MonoBehaviour {
     /// Moves the player when horizontal or vertical input is used.
     /// </summary>
     void MovePlayer() {
-        float horizontal = Input.GetAxisRaw("Horizontal");
-        float vertical = Input.GetAxisRaw("Vertical");
+        float horizontal = Input.GetAxis("Horizontal");
+        float vertical = Input.GetAxis("Vertical");
 
-        Vector3 moveVector = new Vector3(horizontal, 0, vertical).normalized;
+        Vector3 moveVector = new Vector3(horizontal, 0, vertical);
         moveVector = moveVector * walkingSpeed * Time.deltaTime;
         transform.Translate(moveVector);
     }
