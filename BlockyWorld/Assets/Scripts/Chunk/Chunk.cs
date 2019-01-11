@@ -99,6 +99,7 @@ public class Chunk : MonoBehaviour {
         meshFilter.mesh.vertices = chunkMesh.verticesList.ToArray();
         meshFilter.mesh.triangles = chunkMesh.trianglesList.ToArray();
         meshFilter.mesh.uv = chunkMesh.uvList.ToArray();
+        meshFilter.mesh.RecalculateNormals();
 
         // add the collider mesh to the mesh collider
         meshCollider.sharedMesh = null;
