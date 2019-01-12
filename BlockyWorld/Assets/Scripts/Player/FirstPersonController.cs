@@ -24,6 +24,7 @@ public class FirstPersonController : MonoBehaviour {
         // get the rb and cc component
         rb = GetComponent<Rigidbody>();
         cc = GetComponent<CapsuleCollider>();
+        Cursor.lockState = CursorLockMode.None;
     }
 
     // Update is called once per frame

@@ -7,17 +7,22 @@ public class BlockTerrain : MonoBehaviour {
     // the prefab for instantiating chunks
     public GameObject chunkPrefab;
 
+    // the terrain generator
+    TerrainGenerator terrainGenerator;
+
     // size of the terrain in chunks
-    int terrainWidth = 10;
-    int terrainHeight = 2;
+    int terrainWidth = 20;
+    int terrainHeight = 10;
 
     // dictionary to save all the chunks with their world position as key
     Dictionary<Vector3, Chunk> chunks = new Dictionary<Vector3, Chunk>();
 
     void Start() {
+        terrainGenerator = new TerrainGenerator(terrainHeight * 2);
+
         for (int x = -terrainWidth; x < terrainWidth; x++) {
             for (int z = -terrainWidth; z < terrainWidth; z++) {
-                for (int y = -terrainHeight; y < 0; y++) {
+                for (int y = -terrainHeight; y < terrainHeight; y++) {
                     CreateChunk(new Vector3(x * Chunk.chunkSize, y * Chunk.chunkSize, z * Chunk.chunkSize));
                 }
             }
@@ -153,12 +158,12 @@ public class BlockTerrain : MonoBehaviour {
                 for (int y = 0; y < Chunk.chunkSize; y++) {
                     Vector3 blockPos = new Vector3(x, y, z);
 
-                    if ((blockPos.y + chunkPos.y) < -3) {
-                        SetBlock(blockPos + chunkPos, new StoneBlock(blockPos));
-                    } else if ((blockPos.y + chunkPos.y) < -1) {
-                        SetBlock(blockPos + chunkPos, new DirtBlock(blockPos));
+                    float terrainHeight = terrainGenerator.GetTerrainHeight(chunkPos + blockPos);
+
+                    if ((blockPos.y + chunkPos.y) < terrainHeight) {
+                        SetBlock(chunkPos + blockPos, new GrassBlock(blockPos));
                     } else {
-                        SetBlock(blockPos + chunkPos, new GrassBlock(blockPos));
+                        SetBlock(chunkPos + blockPos, new AirBlock(blockPos));
                     }
                 }
             }
