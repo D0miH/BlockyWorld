@@ -18,11 +18,9 @@ public class BlockTerrain : MonoBehaviour {
     Dictionary<Vector3, Chunk> chunks = new Dictionary<Vector3, Chunk>();
 
     void Start() {
-        terrainGenerator = new TerrainGenerator(terrainHeight * 2);
-
-        for (int x = -terrainWidth; x < terrainWidth; x++) {
-            for (int z = -terrainWidth; z < terrainWidth; z++) {
-                for (int y = -terrainHeight; y < terrainHeight; y++) {
+        for (int x = -terrainWidth; x <= terrainWidth; x++) {
+            for (int z = -terrainWidth; z <= terrainWidth; z++) {
+                for (int y = -terrainHeight; y <= terrainHeight; y++) {
                     CreateChunk(new Vector3(x * Chunk.chunkSize, y * Chunk.chunkSize, z * Chunk.chunkSize));
                 }
             }
@@ -153,20 +151,7 @@ public class BlockTerrain : MonoBehaviour {
 
         chunks.Add(chunkPos, chunk);
 
-        for (int x = 0; x < Chunk.chunkSize; x++) {
-            for (int z = 0; z < Chunk.chunkSize; z++) {
-                for (int y = 0; y < Chunk.chunkSize; y++) {
-                    Vector3 blockPos = new Vector3(x, y, z);
-
-                    float terrainHeight = terrainGenerator.GetTerrainHeight(chunkPos + blockPos);
-
-                    if ((blockPos.y + chunkPos.y) < terrainHeight) {
-                        SetBlock(chunkPos + blockPos, new GrassBlock(blockPos));
-                    } else {
-                        SetBlock(chunkPos + blockPos, new AirBlock(blockPos));
-                    }
-                }
-            }
-        }
+        terrainGenerator = new TerrainGenerator();
+        terrainGenerator.GenerateChunk(ref chunk);
     }
 }
