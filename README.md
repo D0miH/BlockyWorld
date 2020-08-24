@@ -1,5 +1,11 @@
 # BlockyWorld
-A simple Minecraft clone made with Unity to experiment with procedural terrain generation. The blocks are generated in chunks whereas the blocks that are not visible currently are culled.
+A simple Minecraft clone made with Unity to experiment with infinite procedural terrain generation.
+
+## Features
+- Endless terrain generation
+- Performance optimization: Only the outer (visible) faces of each chunk are rendered
+- Cave generation
+
 
 <img src="https://github.com/D0miH/BlockyWorld/blob/master/Screenshot.png?raw=true" width=700/>
 
